@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Multiplication</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f0f0;
+    }
+    textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Matrix Multiplication</h1>
+
+  <label>Matrix A (rows separated by new lines, values by spaces):</label>
+  <textarea id="matrixA" rows="4" placeholder="e.g.\n1 2\n3 4"></textarea>
+
+  <label>Matrix B (rows separated by new lines, values by spaces):</label>
+  <textarea id="matrixB" rows="4" placeholder="e.g.\n5 6\n7 8"></textarea>
+
+  <button onclick="multiplyMatrices()">Multiply</button>
+
+  <div id="result"></div>
+
+  <script>
+    function parseMatrix(text) {
+      return text.trim().split('\n').map(row => row.trim().split(/\s+/).map(Number));
+    }
+
+    function multiplyMatrices() {
+      const A = parseMatrix(document.getElementById('matrixA').value);
+      const B = parseMatrix(document.getElementById('matrixB').value);
+
+      const rowsA = A.length, colsA = A[0].length;
+      const rowsB = B.length, colsB = B[0].length;
+
+      const resultDiv = document.getElementById('result');
+
+      if (colsA !== rowsB) {
+        resultDiv.innerText = "Matrix A columns must match Matrix B rows.";
+        return;
+      }
+
+      let result = new Array(rowsA).fill(0).map(() => new Array(colsB).fill(0));
+
+      for (let i = 0; i < rowsA; i++) {
+        for (let j = 0; j < colsB; j++) {
+          for (let k = 0; k < colsA; k++) {
+            result[i][j] += A[i][k] * B[k][j];
+          }
+        }
+      }
+
+      resultDiv.innerText = "Result:\n" + result.map(row => row.join(' ')).join('\n');
+    }
+  </script>
+
+</body>
+</html>
